@@ -1,2 +1,2 @@
 # os
-os code practice
+this is for os code self practice
