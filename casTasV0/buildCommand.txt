@@ -1,0 +1,1 @@
+clang++ -std=c++11 casV0.cpp -o cas -pthread
