@@ -639,3 +639,43 @@ What does wait() do?                            Unlocks mutex, sleeps; on wake, 
 What if no lock?                                Race conditions, missed notifications, undefined behavior
 
 */
+
+/*
+part 6: another version of code to understand cv.wait(lock, ...)
+
+using namespace std;
+using namespace std::chrono_literals;
+
+std::mutex m;
+std::condition_variable cv;
+bool ready = false;
+
+void producer() {
+    std::this_thread::sleep_for(std::chrono::milliseconds(1));  // 提前发出通知
+    {
+        std::lock_guard<std::mutex> lock(m);
+        ready = true;
+    }
+    std::cout << "[Producer] notify_one()\n";
+    cv.notify_one();  // 🚨 通知早于 consumer 注册
+}
+
+void consumer() {
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));  // 故意延迟，让 notify 先发生
+
+    std::cout << "    [Consumer] waiting...\n";
+    std::unique_lock<std::mutex> lock(m);
+    cv.wait(lock, [] { return ready; });  // 🚨 notify 已错过，线程挂住！
+    std::cout << "    [Consumer] resumed. ready = " << std::boolalpha << ready << "\n";
+}
+
+int main() {
+    std::thread t1(producer);
+    std::thread t2(consumer);
+
+    t1.join();
+    t2.join();
+
+    return 0;
+}
+*/
