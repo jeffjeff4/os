@@ -1,0 +1,1 @@
+clang++ -std=c++11 semaphoreV0.cpp -o semaphoreV0 -pthread
