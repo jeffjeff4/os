@@ -1,0 +1,2 @@
+clang++ -std=c++11 timedMutexV0.cpp -o timedMutexV0 -pthread
+clang++ -std=c++17 sharedMutexV0.cpp -o sharedMutexV0  -pthread
